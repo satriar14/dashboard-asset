@@ -1,65 +1,106 @@
-import Image from "next/image";
+import { KpiCards } from "@/components/dashboard/kpi-cards";
+import { HealthCharts } from "@/components/dashboard/health-charts";
+import { MaintenanceCalibration } from "@/components/dashboard/maintenance-calibration";
+import { RecentIssues } from "@/components/dashboard/recent-issues";
+import { TrendChart } from "@/components/dashboard/trend-chart";
+import { AssetCategories } from "@/components/dashboard/asset-categories";
+import { UpcomingSchedules } from "@/components/dashboard/upcoming-schedules";
+import { CostTracker } from "@/components/dashboard/cost-tracker";
+import { ActivityFeed } from "@/components/dashboard/activity-feed";
+import { DashboardFilters } from "@/components/dashboard/dashboard-filters";
+import { FilterProvider } from "@/components/dashboard/filter-context";
+import {
+  LayoutDashboard,
+  MapPin,
+  Search,
+  Bell,
+  UserCircle
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default function DashboardPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <FilterProvider>
+      <div className="min-h-screen bg-slate-50/50 dark:bg-zinc-950">
+        {/* Top Header */}
+        <header className="sticky top-0 z-10 border-b bg-white/80 backdrop-blur-md dark:bg-zinc-900/80">
+          <div className="container mx-auto flex h-16 items-center justify-between px-4">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white">
+                <LayoutDashboard size={20} />
+              </div>
+              <span className="text-xl font-bold tracking-tight">AssetGuard AI</span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <div className="hidden items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 dark:bg-zinc-800 md:flex">
+                <Search size={16} className="text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search assets..."
+                  className="bg-transparent text-sm outline-none"
+                />
+              </div>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell size={20} />
+                <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-rose-500" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <UserCircle size={20} />
+              </Button>
+            </div>
+          </div>
+        </header>
+
+        <main className="container mx-auto space-y-8 p-4 py-8 md:p-8">
+          {/* Page Title */}
+          <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
+              <p className="text-muted-foreground italic">Real-time health and status monitoring for all medical assets.</p>
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline">Export Report</Button>
+              <Button className="bg-blue-600 hover:bg-blue-700">Add New Asset</Button>
+            </div>
+          </div>
+
+          {/* Quick Filters */}
+          <DashboardFilters />
+
+          {/* 1. KPI Cards */}
+          <KpiCards />
+
+          {/* 2 & 3. Primary Charts */}
+          <div className="grid gap-8">
+            <HealthCharts />
+            <MaintenanceCalibration />
+          </div>
+
+          {/* 4. Secondary Charts */}
+          <div className="grid gap-8 md:grid-cols-2">
+            <AssetCategories />
+            <CostTracker />
+          </div>
+
+          {/* 5. Lists & Feeds */}
+          <div className="grid gap-8 md:grid-cols-2 items-start">
+            <UpcomingSchedules />
+            <ActivityFeed />
+          </div>
+
+          {/* 6. Bottom Section: Trend & Table */}
+          <div className="grid gap-8">
+            <TrendChart />
+            <RecentIssues />
+          </div>
+        </main>
+
+        {/* Footer */}
+        <footer className="border-t bg-white p-4 text-center text-sm text-muted-foreground dark:bg-zinc-900">
+          <p>© 2026 AssetGuard AI - Advanced Medical Asset Management System</p>
+        </footer>
+      </div>
+    </FilterProvider>
   );
 }
